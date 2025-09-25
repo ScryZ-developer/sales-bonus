@@ -101,7 +101,7 @@ function analyzeSalesData(data, options) {
         });
     });
     // @TODO: Сортировка продавцов по прибыли
-    
+    sellerStats.sort((a, b) => b.profit - a.profit);
 
     // @TODO: Назначение премий на основе ранжирования
     
