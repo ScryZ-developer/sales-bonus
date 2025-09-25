@@ -24,7 +24,7 @@ function calculateBonusByProfit(index, total, seller) {
       return profit * 0.15;
     } else if (index == 1 || index == 2) { // Если первый или второй
       return profit * 0.1;
-    } else if (index == total) { // Если последний
+    } else if (index == total - 1) { // Если последний
       return 0;
     } else { // Для остальных
       return profit * 0.05;
