@@ -7,8 +7,9 @@
 function calculateSimpleRevenue(purchase, _product) {
    // @TODO: Расчет выручки от операции
    const { discount, sale_price, quantity } = purchase;
+   return (1 - discount / 100) * sale_price * quantity;
 }
-
+  
 /**
  * Функция для расчета бонусов
  * @param index порядковый номер в отсортированном массиве
@@ -19,7 +20,6 @@ function calculateSimpleRevenue(purchase, _product) {
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
     const { profit } = seller;
-    
 }
 
 /**
@@ -31,8 +31,6 @@ function calculateBonusByProfit(index, total, seller) {
 function analyzeSalesData(data, options) {
     // @TODO: Проверка входных данных
     const { calculateRevenue, calculateBonus } = options;
-    // @TODO: Проверка наличия опций
-
     // @TODO: Подготовка промежуточных данных для сбора статистики
 
     // @TODO: Индексация продавцов и товаров для быстрого доступа
