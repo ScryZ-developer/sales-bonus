@@ -30,15 +30,17 @@ function calculateBonusByProfit(index, total, seller) {
  */
 function analyzeSalesData(data, options) {
     // @TODO: Проверка входных данных
-    const { calculateRevenue, calculateBonus } = options;
     if (!data
-        || !Array.isArray(data.sellers)
-        || data.sellers.length === 0
+      || !Array.isArray(data.sellers)
+      || data.sellers.length === 0
     ) {
-        throw new Error('Некорректные входные данные');
+      throw new Error('Некорректные входные данные');
     }
     // @TODO: Подготовка промежуточных данных для сбора статистики
-
+    const { calculateRevenue, calculateBonus } = options;
+    if (!calculateRevenue || !calculateBonus) {
+      throw new Error('Чего-то не хватает');
+    }   
     // @TODO: Индексация продавцов и товаров для быстрого доступа
 
     // @TODO: Расчет выручки и прибыли для каждого продавца
