@@ -72,10 +72,39 @@ function analyzeSalesData(data, options) {
     console.log('Product Index:', productIndex);
 
     // @TODO: Расчет выручки и прибыли для каждого продавца
+    data.purchase_records.forEach(record => { // Чек 
+      const seller = sellerIndex[record.seller_id]; // Продавец
 
+      seller.sales_count++; // Увеличиваем количество продаж 
+      
+      seller.revenue += record.total_amount; // Увеличиваем общую сумму всех продаж
+
+      // Расчёт прибыли для каждого товара
+      record.items.forEach(item => {
+        const product = productIndex[item.sku]; // Товар
+
+        let cost = product.purchase_price * item.quantity; // Считаем себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
+
+        let revenue = calculateRevenue(item, product); // Считаем выручку (revenue) с учётом скидки через функцию calculateRevenue
+
+        let profit = revenue - cost; // Считаем прибыль: выручка минус себестоимость
+        
+        seller.profit += profit; // Увеличиваем общую накопленную прибыль (profit) у продавца  
+
+        seller.revenue += revenue; // Увеличиваем общую сумму выручки (revenue) у продавца
+
+        // Учёт количества проданных товаров
+        if (!seller.products_sold[item.sku]) {
+          seller.products_sold[item.sku] = 0;
+        }
+        seller.products_sold[item.sku] += item.quantity; // По артикулу товара увеличиваем его проданное количество у продавца
+        });
+    });
     // @TODO: Сортировка продавцов по прибыли
+    
 
     // @TODO: Назначение премий на основе ранжирования
+    
 
     // @TODO: Подготовка итоговой коллекции с нужными полями
 }
