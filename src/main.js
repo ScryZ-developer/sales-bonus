@@ -36,11 +36,15 @@ function analyzeSalesData(data, options) {
     ) {
       throw new Error('Некорректные входные данные');
     }
-    // @TODO: Подготовка промежуточных данных для сбора статистики
+
+    // @TODO: Проверка входных опций
     const { calculateRevenue, calculateBonus } = options;
     if (!calculateRevenue || !calculateBonus) {
       throw new Error('Чего-то не хватает');
     }   
+
+    // @TODO: Подготовка промежуточных данных для сбора статистики
+
     // @TODO: Индексация продавцов и товаров для быстрого доступа
 
     // @TODO: Расчет выручки и прибыли для каждого продавца
