@@ -7,7 +7,7 @@
 function calculateSimpleRevenue(purchase, _product) {
   // @TODO: Расчет выручки от операции
   const { discount, sale_price, quantity } = purchase;
-  return (1 - (discount / 100)) * sale_price * quantity;
+  return (1 - discount / 100) * sale_price * quantity;
 }
   
 /**
@@ -20,11 +20,11 @@ function calculateSimpleRevenue(purchase, _product) {
 function calculateBonusByProfit(index, total, seller) {
   // @TODO: Расчет бонуса от позиции в рейтинге
   const { profit } = seller;
-  if (index == 0) {  // Если первый
+  if (index === 0) {  // Если первый
     return profit * 0.15;
-  } else if (index == 1 || index == 2) { // Если второй или третий
+  } else if (index === 1 || index === 2) { // Если второй или третий
     return profit * 0.1;
-  } else if (index == total - 1) { // Если последний
+  } else if (index === total - 1) { // Если последний
     return 0;
   } else { // Для остальных
     return profit * 0.05;
@@ -42,6 +42,7 @@ function analyzeSalesData(data, options) {
   if (!data
     || !Array.isArray(data.sellers)
     || data.sellers.length === 0
+    || data.purchase_records.length === 0
   ) {
     throw new Error('Некорректные входные данные');
   }
@@ -89,10 +90,8 @@ function analyzeSalesData(data, options) {
       }
 
       const cost = product.purchase_price * item.quantity; // Считаем себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
-
-      const revenue = calculateRevenue(item, product); // Считаем выручку (revenue) с учётом скидки через функцию calculateRevenue
-
-      const profit = revenue - cost; // Считаем прибыль: выручка минус себестоимость
+      let revenue = calculateRevenue(item, product); // Считаем выручку (revenue) с учётом скидки через функцию calculateRevenue
+      let profit = revenue - cost; // Считаем прибыль: выручка минус себестоимость
       
       seller.profit += profit; // Увеличиваем общую накопленную прибыль (profit) у продавца  
       seller.revenue += revenue; // Увеличиваем общую сумму выручки (revenue) у продавца
@@ -104,6 +103,7 @@ function analyzeSalesData(data, options) {
       seller.products_sold[item.sku] += item.quantity; // По артикулу товара увеличиваем его проданное количество у продавца
     });
   });
+  console.log(sellerStats)
   // @TODO: Сортировка продавцов по прибыли
   sellerStats.sort((a, b) => b.profit - a.profit);
 
