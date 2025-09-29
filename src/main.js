@@ -55,12 +55,12 @@ function analyzeSalesData(data, options) {
 
   // @TODO: Подготовка промежуточных данных для сбора статистики
   const sellerStats = data.sellers.map(seller => ({
-    id: seller.id,
+    seller_id: seller.id,
     name: seller.first_name + ' ' + seller.last_name,
     revenue: 0,
     profit: 0,
     sales_count: 0,
-    products_sold: {},
+    products_sold: [],
     bonus: 0,
   }));
 
@@ -73,7 +73,7 @@ function analyzeSalesData(data, options) {
   console.log('Product Index:', productIndex);
 
   // @TODO: Расчет выручки и прибыли для каждого продавца
-  data.purchase_records.forEach(record => { // Чек 
+  data.purchase_records.forEach((record) => { // Чек 
     const seller = sellerIndex[record.seller_id]; // Продавец
     if (!seller) return;
 
@@ -86,12 +86,10 @@ function analyzeSalesData(data, options) {
       const product = productIndex[item.sku]; // Товар
       if (!product) return;
 
-      let cost = (product.purchase_price || 0) * (item.quantity || 0); // Считаем себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
-      let revenue = calculateRevenue(record, product); // Считаем выручку (revenue) с учётом скидки через функцию calculateRevenue
+      let cost = product.purchase_price * item.quantity; // Считаем себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
+      let revenue = calculateRevenue(item); // Считаем выручку (revenue) с учётом скидки через функцию calculateRevenue
+
       seller.profit += revenue - cost; // Считаем прибыль: выручка минус себестоимость
-      
-      seller.profit += profit; // Увеличиваем общую накопленную прибыль (profit) у продавца  
-      seller.revenue += revenue; // Увеличиваем общую сумму выручки (revenue) у продавца
 
       // Учёт количества проданных товаров
       if (!seller.products_sold[item.sku]) {
@@ -101,6 +99,7 @@ function analyzeSalesData(data, options) {
     });
   });
   console.log(sellerStats)
+
   // @TODO: Сортировка продавцов по прибыли
   sellerStats.sort((a, b) => b.profit - a.profit);
 
@@ -115,8 +114,8 @@ function analyzeSalesData(data, options) {
   });
 
   // @TODO: Подготовка итоговой коллекции с нужными полями
-  return sellerStats.map(seller => ({
-    seller_id: seller.seller.id, // Строка, идентификатор продавца
+  return sellerStats.map((seller) => ({
+    seller_id: seller.seller_id, // Строка, идентификатор продавца
     name: seller.name, // Строка, имя продавца
     revenue: +seller.revenue.toFixed(2), // Число с двумя знаками после точки, выручка продавца
     profit: +seller.profit.toFixed(2), // Число с двумя знаками после точки, прибыль продавца
