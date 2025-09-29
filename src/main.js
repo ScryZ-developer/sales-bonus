@@ -53,6 +53,11 @@ function analyzeSalesData(data, options) {
     throw new Error('Чего-то не хватает');
   }   
 
+  // Проверка массива товаров
+  if (!Array.isArray(data.products) || data.products.length === 0) {
+    throw new Error('Массив товаров (products) не может быть пустым');
+  } 
+
   // @TODO: Подготовка промежуточных данных для сбора статистики
   const sellerStats = data.sellers.map(seller => ({
     seller_id: seller.id,
